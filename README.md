@@ -6,4 +6,4 @@ Este pequeño programa se encarga de limpiar y convertir las notas de Google Cla
 
 En la pantalla donde estan las notas, cuando usted hace click derecho guardar como... verá que se descarga un archivo y una carpeta
 
-Ese archivo ese el que debe seleccionar a continuación
+Ese archivo es el que debe seleccionar a continuación
