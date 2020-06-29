@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ClassRoomToWord</title>
+</head>
+<body>
+	
+<h3>Parse Classroom to Word Table</h3>
+<p>Este pequeño programa se encarga de limpiar y convertir las notas de Google Classroom en una tabla que es posible copiar en un archivo word</p>
+<p>Cuando usted hace click derecho guardar como... verá que se descarga un archivo y una carpeta</p>
+<p>Ese archivo ese el que debe seleccionar a continuación</p>
+<input type="file" id="file-input" /><button id="file-ok">Abrir</button>
+<div id="contenido-archivo"></div>
+<div class="bar-bottom">Daniel Garcia < danielgarcia.clases@gmail.com ></div>
+<style>
+	*{font-family: arial}
+	td,th{
+		padding:.5rem;
+	}
+	th{background-color: #39c; color:#fff;}
+	td{background-color: #fff}
+	#file-ok{margin-left:1rem;}
+	#contenido-archivo{margin-top: 5rem;justify-content: center;display: flex;background-color:#eee;padding:1rem;min-height:400px;}
+	.bar-bottom{position:fixed;bottom:0}
+</style>
+<script>
+	function leerArchivo(e) {
+	  var archivo = document.querySelector('#file-input').files[0];
+	  if (!archivo) {
+	    return;
+	  }
+	  var lector = new FileReader();
+	  lector.onload = function(e) {
+		    var contenido = e.target.result;
+		    let important = contenido.split('table')
+		    mostrarContenido(`<table id="table" ${important[7]}table>`);
+		    let remove = document.querySelectorAll('table *')
+		    for(let item of remove){
+		    	item.style=""
+		    	item.className=""
+		    }
+		    let removeTd = document.querySelectorAll('table tr td')
+		    for(let item of removeTd){
+		    	item.style="background-color:#fff;"
+		    	try{
+			    	let nota = eval(item.children[0].children[0].children[0].children[1].children[1].innerText.replace(' puntos de ','/'))
+			    	item.innerHTML = (nota * 10).toFixed(2)
+			    }catch( e ){
+			    	//console.log(e)
+			    }
+		    }
+		    let removeTr = document.querySelectorAll('table tr')
+		    removeTr[1].remove()
+		    for(let item of removeTr){
+		    	item.children[item.children.length - 1].remove()
+		    	item.children[item.children.length - 1].remove()
+		    	try{
+			    	item.children[0].innerHTML = item.children[0].children[0].children[0].innerText
+		    	}catch(e){}
+		    }
+		    let removeTh = document.querySelectorAll('table th')
+		    for(let item of removeTh){
+		    	item.style="background-color: #39c; color:#fff;"
+		    	try{
+			    	item.innerHTML = item.children[0].children[0].children[0].children[1].innerText
+			    }catch( e ){
+
+			    }
+		    }
+		    document.querySelector('table th').innerHTML = "Alumno"
+	  };
+	  lector.readAsText(archivo);
+	}
+
+	function mostrarContenido(contenido) {
+	  var elemento = document.getElementById('contenido-archivo');
+	  elemento.innerHTML = contenido;
+	}
+
+	let fileOk = document.getElementById('file-ok')
+	fileOk.addEventListener('click', leerArchivo, false);
+</script>
+
+
+</body>
+</html>
